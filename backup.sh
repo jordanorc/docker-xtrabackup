@@ -11,7 +11,7 @@ MYSQL_HOST="${MYSQL_HOST:-}"
 MYSQL_PORT="${MYSQL_PORT}"
 BACKUP_DIRECTORY="/backup"
 DATA_DIRECTORY="/var/lib/mysql"
-KEY_FILE="/.mykey"
+ENCRYPT_KEY="${ENCRYPT_KEY:-}"
 BACKUP_BIN="/usr/bin/xtrabackup"
 
 find_last_full_backup() {
@@ -39,7 +39,7 @@ do_incremental() {
     echo "Base backup: ${BASE_BACKUP_PATH}"
     echo "Backup dir: ${BACKUP_PATH}"
 
-    ${BACKUP_BIN} --backup --incremental-basedir=${BASE_BACKUP_PATH} --user=${MYSQL_USER} --password=${MYSQL_PASSWORD} --host=${MYSQL_HOST} --target-dir=${BACKUP_PATH} --encrypt-key-file=${KEY_FILE} --compress
+    ${BACKUP_BIN} --backup --incremental-basedir=${BASE_BACKUP_PATH} --user=${MYSQL_USER} --password=${MYSQL_PASSWORD} --host=${MYSQL_HOST} --target-dir=${BACKUP_PATH} --encrypt-key=${ENCRYPT_KEY} --compress
 }
 
 do_full() {
@@ -54,7 +54,7 @@ do_full() {
     echo "Backup dir: ${BACKUP_PATH}"
 
     mkdir -p ${BACKUP_BASE_PATH}
-    ${BACKUP_BIN} --backup --user=${MYSQL_USER} --password=${MYSQL_PASSWORD} --host=${MYSQL_HOST} --target-dir=${BACKUP_PATH} --encrypt-key-file=${KEY_FILE} --compress
+    ${BACKUP_BIN} --backup --user=${MYSQL_USER} --password=${MYSQL_PASSWORD} --host=${MYSQL_HOST} --target-dir=${BACKUP_PATH} --encrypt-key=${ENCRYPT_KEY} --compress
 }
 
 cleanup() {
